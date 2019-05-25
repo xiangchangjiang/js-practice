@@ -26,18 +26,18 @@
   <script>
     window.onload = function () {
       var box1 = document.getElementById('box1')
-      var speed = 10
-      document.onkeydown = function (event) {
-        event = event || window.event
-        event.preventDefault && event.preventDefault()
-        //阻止Chrome和火狐默认事件
-        console.log(event)
-
-        speed = (event.ctrlKey) ? 2 : 10
-        //按下Ctrl键就缓动,否则就快速移动,speed意义不是太大,这里还是写成定值10了
-        console.log(speed)
-        console.log('event.keyCode=' + event.keyCode)
-        switch (event.keyCode) {
+      var speed = 5
+      var direction
+      var timer
+      getDirection()
+      console.log(direction, 33)
+      timer = setInterval(judgeDirectionAndMove, 50)
+      //计时器一直在运行,只要发现derection和设定的方向键匹配时就立即移动
+      //解决了键盘长按第一下 的 延迟保护
+    
+      function judgeDirectionAndMove(){
+        console.log(direction, 'timer')
+        switch (direction) {
           case 37:
             if (box1.offsetLeft > 0) {
               box1.style.left = box1.offsetLeft - speed + 'px'
@@ -52,11 +52,10 @@
 
           case 39:
             if (parseInt(box1.style.left) < 300) {
-              console.log(event.keyCode)
+              console.log(direction)
               box1.style.left = box1.offsetLeft + speed + 'px'
               console.log(box1.style.left, 39)
             }
-            console.log('ifxx')
             break;
 
           case 40:
@@ -65,7 +64,28 @@
             }
             break;
         }
-        return false//阻止IE8默认事件
+      }
+      function getDirection() {
+        document.onkeydown = function (event) {
+          event = event || window.event
+          event.preventDefault && event.preventDefault()
+          //阻止Chrome和火狐默认事件
+          // console.log(event)
+          speed = (event.ctrlKey) ? 2 : 10
+          //按下Ctrl键就缓动,否则就快速移动,speed意义不是太大,这里还是写成定值10了
+          console.log('speed=' + speed)
+          // console.log('event.keyCode=' + event.keyCode)
+          direction = event.keyCode
+          // setTimer()
+          console.log(direction, 51)
+          // return false //阻止IE8默认事件
+        }
+        document.onkeyup = function (event) {
+          event = event || window.event
+          console.log('event.keyCode=' + event.keyCode)
+          // clearInterval(timer)
+          direction = 0 //使元素不再运动      
+        }
       }
     }
   </script>
@@ -74,11 +94,11 @@
 <body>
   <h4>按住Ctrl缓动,松开Ctrl快速移动,监听document的onkeydown事件</h4>
   <hr>
-  <h4>事件对象event的event.altKey   event.ctrlKey  event.shiftKey判断是否按住了这几个键</h4>
+  <h4>事件对象event的event.altKey event.ctrlKey event.shiftKey判断是否按住了这几个键</h4>
   <hr>
-  <h4>对象.offsetLeft  对象.offsetTop 用来获取对象相对于其定位元素的偏移量 获取到的数据类型是number,没有单位,可以直接用于计算</h4>
+  <h4>对象.offsetLeft 对象.offsetTop 用来获取对象相对于其定位元素的偏移量 获取到的数据类型是number,没有单位,可以直接用于计算</h4>
   <hr>
-  <h4>对象要定位,内联样式 对象.style.left  赋值时要加上"px"</h4>
+  <h4>对象要定位,内联样式 对象.style.left 赋值时要加上"px"</h4>
   <hr>
   <h4>通过条件判断可以给其设定运动范围</h4>
   <div id="box1" style='left:250px;top:300px;'></div>
