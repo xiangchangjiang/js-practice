@@ -13,30 +13,38 @@
     background:greenyellow;
     position:absolute;
     left:0;
+    /*这里设置left:0;是为了兼容IE8,在IE8中left不写的话获取的值是auto,用于计算会出错.其它浏览器不设置也可以因为默认获取是0*/
   }
   </style>
   <script>
     window.onload=function(){
       var btn1=document.getElementById('btn1')
       var xx=document.getElementById('xx')
+      var timer 
       btn1.onclick=function(){
-        var timer=setInterval(function(){
+
+        //生成计时器之前要清除上次的计时器,防止生成多个计时器,导致div越来越快
+        window.clearInterval(timer)
+
+        timer=setInterval(function(){
         console.log(getStyle(xx,'left'),111111111111)
         var oldValue=parseInt(getStyle(xx,'left'))
-        var newValue=oldValue+19
+        var newValue=oldValue+10
+        //将大于400的值设置为400
         if(newValue>400){
           newValue=400
         }
 
-        if(xx.offsetLeft<=400){
-          console.log(xx.offsetLeft)
-          xx.style.left=newValue+'px'
+        xx.style.left=newValue+'px'
+        //当newValue值等于400时清除计时器
+        if(xx.offsetLeft===400){
+          window.clearInterval(timer)
         }
         },100)
       }
       
       function getStyle(obj,name){
-        return obj.getComputedStyle?getComputedStyle(obj,null)[name]:obj.currentStyle[name]
+        return window.getComputedStyle?getComputedStyle(obj,null)[name]:obj.currentStyle[name]
       }
     }
   </script>
