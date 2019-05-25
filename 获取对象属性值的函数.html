@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>JS Bin</title>
+  <style>
+    #box1{
+      margin-top:30px;
+      height:100px;
+      background:red;
+      left:0;
+    }
+  </style>
+
+</head>
+
+<body>
+  <button id='btn1'>点我</button>
+  <div id="box1" style='background-color:yellowgreen;'></div>
+  <script>
+    window.onload=function(){
+      var btn1=document.getElementById('btn1')
+      var box1=document.getElementById('box1')
+      btn1.onclick=function(){
+        //box1.currenStyle.backgroundColor
+        // var xx=getStyle(box1,'backgroundColor')
+        // alert(xx)
+        alert(getStyle(box1,'left'),111111111)
+      } 
+    }
+     
+    function getStyle(obj,name){
+      console.log(!!obj.currentStyle[name])
+      // if(obj.currentStyle){
+      //   return obj.currentStyle[name]
+      // }else{
+      //   return getComputedStyle(obj,null)[name]
+      // }
+      // return obj.currentStyle?(obj.currentStyle[name]):(getComputedStyle(obj,null)[name]);
+      return obj.getComputedStyle?getComputedStyle(obj,null)[name]:obj.currentStyle[name]
+
+    }
+  </script>
+
+
+
+</body>
+
+</html>
+
+
+  

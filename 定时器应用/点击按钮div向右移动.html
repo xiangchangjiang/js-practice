@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>JS Bin</title>
+  <style>
+    *{margin:0;padding:0;}
+  #xx{
+    width:100px;
+    height:100px;
+    background:greenyellow;
+    position:absolute;
+    left:0;
+  }
+  </style>
+  <script>
+    window.onload=function(){
+      var btn1=document.getElementById('btn1')
+      var xx=document.getElementById('xx')
+      btn1.onclick=function(){
+        var timer=setInterval(function(){
+        console.log(getStyle(xx,'left'),111111111111)
+        var oldValue=parseInt(getStyle(xx,'left'))
+        var newValue=oldValue+19
+        if(newValue>400){
+          newValue=400
+        }
+
+        if(xx.offsetLeft<=400){
+          console.log(xx.offsetLeft)
+          xx.style.left=newValue+'px'
+        }
+        },100)
+      }
+      
+      function getStyle(obj,name){
+        return obj.getComputedStyle?getComputedStyle(obj,null)[name]:obj.currentStyle[name]
+      }
+    }
+  </script>
+</head>
+
+<body>
+  <button id='btn1'>点击按钮div向右走</button>
+  <br>
+  <br>
+  <div id="xx"></div>
+  <!-- 用div画一条竖线 -->
+  <div style='width:0;height:800px;position:absolute;left:400px;top:0;border-right:1px solid black;'></div>
+
+</body>
+
+</html>
