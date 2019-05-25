@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>JS Bin</title>
+  <style>
+    #box1{
+      width:100px;
+      height:100px;
+      background-color:yellowgreen;
+      position:absolute;
+    }
+    body{height:1000px;}
+  </style>
+</head>
+
+<body>
+  <div id="box1"></div>
+</body>
+<script>
+  var box1=document.getElementById('box1')
+
+    document.onmousemove=function(event){
+      event=event||window.event
+      var st=document.documentElement.scrollTop
+      console.log(st)
+      var sl=document.documentElement.scrollLeft
+      console.log(sl)      
+      var x=event.clientX-50+sl
+      var y=event.clientY-50+st
+      console.log('x='+x,'y='+y)
+
+
+      box1.style.left=x+'px'
+      box1.style.top=y+'px'
+      
+    }
+</script>
+
+</html>

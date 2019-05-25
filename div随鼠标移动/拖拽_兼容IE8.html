@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>拖拽-兼容IE8,使用pageX和pageY获取鼠标相对于当前视口的坐标,需要考虑滚动条</title>
+  <style>
+    #box1,#box2 { width: 100px; height: 100px; background-color: yellowgreen; position: absolute; }
+    #box2 { background: green; width: 50px; position:absolute; border:3px solid black; }
+    #box3{ background-color:red; width:40px; height:120px; position:relative; top:300px; left:250px; border:3px solid gold; }
+    body { height: 1000px; border: 3px solid }
+  </style>
+</head>
+
+<body>
+  <h3>拖拽-兼容IE8,(使用IE8支持的clientX 和clientY 获取鼠标相对当前视口的坐标,此时需要考虑滚动条的影响)</h3> 
+  xxxxxxxxxxxxxxxnihao 
+  <div id="box1"></div>
+  <div id="box2"></div>
+  <div id="box3"></div>
+  <img src="https://i.loli.net/2019/05/24/5ce7aaf2a203698426.jpg" id='image' alt="dog" style='position: absolute;'>
+</body>
+<script>
+  var box1 = document.getElementById('box1')
+  var box2 = document.getElementById('box2')
+  var box3 = document.getElementById('box3')
+  var image = document.getElementById('image')
+  
+  drag(box1)
+  drag(box2)
+  drag(box3)
+  drag(image)
+
+  //封装成一个函数,定位的元素对象都可以拖拽 兼容IE和Chrome 火狐
+  function drag(obj) {
+    obj.onmousedown = function (event) {
+      //设置捕获鼠标按下,解决IE8中默认拖拽不能用return false解决的问题.
+      //后边要设置一个obj.releaseCapture(),否则陷入循环,所有点击都被obj捕获.
+      obj.setCapture && obj.setCapture()
+      //解决事件对象兼容问题
+      event = event || window.event
+      console.log('鼠标按下 了')
+      //解决滚动条问题,只要用到了事件对象的clientX clientY就需要考虑滚动条问题,因为clientX clientY是鼠标相对于当前视口的坐标.
+      //pageX和pageY如果不考虑兼容IE8,则是一个很好的选择,因为他们是鼠标相对于文档的坐标
+      var st1 = document.documentElement.scrollTop
+      var sl1 = document.documentElement.scrollLeft
+      /*当出现滚动条时,要加上滚动距离,才是obj左上角与光标间的距离*/
+      var ofx = event.clientX - obj.offsetLeft + sl1
+      var ofy = event.clientY - obj.offsetTop + st1
+      document.onmousemove = function (event) {
+        event = event || window.event
+        var x = event.clientX - ofx
+        var y = event.clientY - ofy
+        //解决滚动条问题,只要用到了事件对象的clientX clientY就需要考虑滚动条问题,因为clientX clientY是鼠标相对于当前视口的坐标.
+        //pageX和pageY如果不考虑兼容IE8,则是一个很好的选择,因为他们是鼠标相对于文档的坐标
+        var st2 = document.documentElement.scrollTop
+        var sl2 = document.documentElement.scrollLeft
+        obj.style.left = x + sl2 + 'px'
+        obj.style.top = y + st2 + 'px'
+      }
+      document.onmouseup = function () {
+        console.log('鼠标抬起来了')
+        //鼠标抬起,取消捕获鼠标按下事件
+        obj.releaseCapture && obj.releaseCapture()
+        //box1.onmousedown=null 不能写这句,写了只能拖拽一次
+        document.onmousemove = null
+        document.onmouseup = null
+      }
+      //取消浏览器默认拖拽事件(不取消会导致 页面全选后再拖动box1时异常)
+      //但这个方法对IE8无效
+      return false
+    }
+  }
+
+</script>
+
+</html>

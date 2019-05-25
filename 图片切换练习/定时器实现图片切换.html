@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>JS Bin</title>
+  <style>
+    #wrapper {
+      width: 400px;
+      margin: 0 auto;
+      padding: 10px;
+      background: yellowgreen;
+      text-align: center;
+      border: 3px solid black;
+    }
+  </style>
+  <script>
+    window.onload = function () {
+      var xx = ['./img/001.jpg', './img/002.jpg', './img/003.jpg', './img/004.jpg']
+      var img = document.getElementById('img')
+      var btn1 = document.getElementById('btn1')
+      var btn2 = document.getElementById('btn2')
+      //var wrapper = document.getElementById('wrapper')
+      var timer
+      btn1.onclick = function () {
+        clearInterval(timer)
+        //每次点击btn1时关闭上一个计时器,以防止用户多次点击开启多个计时器,导致图片切换越来越快以及点击btn2无法停止图片切换的问题
+        setTimer()
+      }
+      btn2.onclick = function () {
+        clearInterval(timer)
+        //即使在没有点击btn1时(此时timer为undefined),也不会报错,
+        //clearInterval()传入的参数是无效标识时,什么都不做,也不报错.
+      }
+
+      img.onmouseenter = function () {
+        clearInterval(timer)
+      }
+      img.onmouseleave = function () {
+        setTimer()
+      }
+
+      function setTimer() {
+        var index = 0
+        timer = setInterval(function () {
+          index++
+          index = index % xx.length
+          console.log(xx[index])
+          img.src = xx[index]
+        }, 800)
+      }
+    }
+  </script>
+
+</head>
+
+<body>
+  <div id="wrapper">
+    <img src="./img/002.jpg" alt="" id='img'>
+    <button id="btn1">开始</button>
+    <button id="btn2">停止</button>
+  </div>
+</body>
+
+</html>

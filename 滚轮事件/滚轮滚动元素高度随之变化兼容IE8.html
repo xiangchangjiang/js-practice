@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>滚轮事件</title>
+  <style>
+    #box1 {
+      width: 100px;
+      height: 100px;
+      background: greenyellow;
+    }
+
+    body {
+      height: 1000px;
+      border: 2px solid black;
+    }
+  </style>
+  <script>
+    window.onload = function () {
+      var box1 = document.getElementById('box1')
+      var h = box1.clientHeight
+      //h为box1元素的可见高度(内容+padding*2)
+
+      //为Chrome和IE绑定滚轮事件
+      box1.onmousewheel = function (event) {
+        event = event || window.event
+        event.preventDefault && event.preventDefault()
+        //用来阻止火狐浏览器有滚动条时滚轮滚动页面滑动
+        console.log(event.wheelDelta)
+        event.wheelDelta > 0 || event.detail < 0 ? h -= 5 : h += 5
+        box1.style.height = h + 'px'
+        return false
+        //用来阻止IE和Chrome在浏览器有滚动条时滚轮滚动页面滑动
+      }
+      //为火狐绑定鼠标滚轮事件(直接调用已经写好的用于Chrome和IE的滚轮函数)
+      bind(box1, 'DOMMouseScroll', box1.onmousewheel)
+
+    }
+    //第116课写好的使用addEventListener attachEvent以及 绑定事件兼容IE8的
+    function bind(obj, eventStr, callback) {
+      if (obj.addEventListener) {
+        //Chrome和火狐调用
+        obj.addEventListener(eventStr, callback, false)
+      } else {
+        //IE8调用
+        obj.attachEvent('on' + eventStr, function () {
+          console.log('xxxxxxxxxxxxxxxxxxxxxxxx')
+          console.log(this, 1111) //这里的this是window
+          console.log('xxxxxxxxxxxxxxxxxxxxxxxx')
+          callback.call(obj)      
+        })
+      }
+    }
+  </script>
+</head>
+
+<body>
+  <h3>滚轮监听中火狐和Chrome以及IE差别很大</h3>
+  <div id="box1"></div>
+</body>
+
+</html>

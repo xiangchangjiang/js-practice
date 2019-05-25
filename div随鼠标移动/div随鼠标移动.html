@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>JS Bin</title>
+<style>
+  body{height:1500px;}
+  #box1{
+    width:100px;
+    height:100px;
+    background:red;
+    position:absolute;
+  }  
+  
+</style>
+  <script>
+    /*
+    *要实现div随鼠标移动思路:
+      *鼠标坐标值可以得到,相对当前视口有clientX clientY
+      *相对文档有pageX pageY(ie8不支持)如果不兼容IE建议用这个,省事,坐标原点是同一个
+      *要兼容IE那就用clientX clientY吧
+      *当出现滚动条时,鼠标坐标原点与文档元素坐标原点发生偏移,偏移量可以用滚动条所在元素的scrollTop和scrollWidth获取
+      *在定位文档元素时加上滚动偏移量就可以
+    *问题点:滚动条出现时,滚动条不出现看起来一切正常
+    */
+    window.onload=function(){
+      var box1=document.getElementById('box1')
+      var body=document.body
+      document.onmousemove=function(event){
+        //监听整个文档比较保险,监听div的话,出了div就没有效果了.
+        event=event||window.event
+        var st=document.documentElement.scrollTop || document.body.scrollTop
+        var sl=document.documentElement.scrollLeft || document.body.scrollLeft
+        console.log(sl,'xxxxxxxxxxxxxxxx')
+        //本题中例子是设置了body的宽高,超出了可视范围
+        //由于在滚动条的归属问题上有分歧(滚动条是HTML的/滚动条是body的),所以出现上式.
+        //目前可以认为是HTML的即document.documentElement.scrollTop(Chrome新版本\IE\火狐)(Chrome老版本认为是body的)
+        //以后判断滚动条归属问题要看文档结构
+        //console.log(event)
+        var left=event.clientX-50+sl
+        var top=event.clientY-50+st
+        box1.style.left=left+'px'
+        box1.style.top=top+'px'
+        
+        console.log(st,1111)
+      }
+
+    }
+  </script>
+</head>
+  
+<body class='clearfix'>
+
+<div id="box1"></div>
+
+
+
+</body>
+</html>

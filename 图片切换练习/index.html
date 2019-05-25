@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>图片切换</title>
+  <script>
+    window.onload = function () {
+      var prev = document.getElementById('prev');
+      var next = document.getElementById('next');
+      var img = document.getElementsByTagName('img')[0]
+      var p = document.getElementsByTagName('p')[0]
+      // console.log(prev,next,img)
+      var imgArr = ['./img/001.jpg', './img/002.jpg', './img/003.jpg', './img/004.jpg']
+      var index = 0
+      p.innerHTML = '共 ' + imgArr.length + ' 张    第 ' + (index + 1) + ' 张'
+
+      prev.onclick = function () {
+        index--
+        if (index < 0) {
+          index = imgArr.length - 1
+        }
+        img.src = imgArr[index]
+        p.innerHTML = '共 ' + imgArr.length + ' 张    第 ' + (index + 1) + ' 张'
+      }
+      next.onclick = function () {
+        index++
+        if (index > imgArr.length - 1) {
+          index = 0
+        }
+        img.src = imgArr[index]
+        p.innerHTML = '共 ' + imgArr.length + ' 张    第 ' + (index + 1) + ' 张'
+      }
+    }
+  </script>
+</head>
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+  }
+
+  #wrapper {
+    /* border:1px solid red; */
+    width: 400px;
+    margin: 0 auto;
+    padding: 10px;
+    background: yellowgreen;
+    text-align: center;
+
+  }
+</style>
+<body>
+  <div id="wrapper">
+    <p></p>
+    <img src="./img/001.jpg" alt="dog">
+    <button id="prev">上一张</button>
+    <button id="next">下一张</button>
+  </div>
+</body>
+</html>

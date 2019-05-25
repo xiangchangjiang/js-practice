@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>拖拽(元素随鼠标移动)-不兼容IE8的写法</title>
+  <style>
+    #box1,#box2{ width:100px; height:100px; background-color:yellowgreen; position:absolute; } 
+    #box2{ background:green; width:50px; top:180px; right:69px; }
+    #box3{ width:40px; height:80px; position:absolute; top:300px; left:250px; background:red; }
+    body{height:1000px;border:3px solid}
+  </style>
+</head>
+
+<body>
+ <h3>拖拽(元素随鼠标移动)-不兼容IE8的写法(使用IE8不支持的pageX 和pageY 获取鼠标相对文档的坐标,此时不用考虑滚动条的影响)</h3>
+  xxxxxxxxxxxxxxx
+  <div id="box1"></div>
+  <div id="box2"></div>
+  <div id="box3"></div>
+  <img src="https://i.loli.net/2019/05/24/5ce7aaf2a203698426.jpg" id='image' alt="dog" style='position: absolute;'>
+</body>
+<script>
+  var box1=document.getElementById('box1')
+  var box2=document.getElementById('box2')
+  var box3=document.getElementById('box3')
+  var image = document.getElementById('image')
+
+  drag(box1)
+  drag(box2)
+  drag(box3)
+  drag(image)
+
+  function drag(obj){
+    obj.onmousedown=function(event){
+      event=event||window.event
+      var ofx=event.pageX-obj.offsetLeft
+      var ofy=event.pageY-obj.offsetTop
+      document.onmousemove=function(event){
+        event=event||window.event
+        var x=event.pageX
+        var y=event.pageY
+        obj.style.left=x-ofx+'px'
+        obj.style.top=y-ofy+'px'           
+      }           
+      document.onmouseup=function(){
+        //obj.onmousedown=null 这句不能写,否则只能拖拽一次
+        document.onmousemove=null
+        document.onmouseup=null
+      }      
+      return false
+    }
+  }
+</script>
+
+</html>

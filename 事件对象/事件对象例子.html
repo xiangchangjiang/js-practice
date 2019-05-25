@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>JS Bin</title>
+</head>
+<style>
+  #areaDiv {
+    width: 300px;
+    height: 40px;
+    border: 1px solid black;
+    line-height:40px;
+    color:#95a6ad;
+  }
+
+  #showMsg {
+    width: 300px;
+    height: 20px;
+    border: 1px solid;
+  }
+</style>
+
+<script>
+  window.onload = function () {
+    var areaDiv = document.getElementById('areaDiv')
+    areaDiv.innerHTML='鼠标在方框中移动,坐标显示在下方'
+    var showMsg = document.getElementById('showMsg')
+    var x, y
+    areaDiv.onmousemove = function (event) {
+      /*兼容性问题解决  IE8及以下浏览器没有将event作为参数传给响应函数,而是存在window对象属性中  即window.event*/
+      /*写成window.event Chrome和IE支持,但是老版本的火狐不支持*/
+      // if(!event){
+      //   event=window.event
+      // }
+      event = event || window.event
+      x = event.clientX
+      y = event.clientY
+      showMsg.innerHTML = 'x=' + x + ',' + 'y=' + y
+
+    }
+  }
+</script>
+
+<body>
+  <br>
+  <div id="areaDiv"></div>
+  <br>
+  <div id="showMsg"></div>
+</body>
+
+</html>

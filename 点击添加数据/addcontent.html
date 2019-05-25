@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    table,
+    table tr th,
+    table tr td {
+      border: 1px solid
+    }
+
+    table {
+      border-collapse: collapse;
+      /* margin: 0 auto; */
+    }
+
+    label {
+      width: 3em;
+      display: inline-block;
+    }
+
+    #xxx {
+      border: 1px solid;
+      display: inline-block;
+      padding: 20px;
+    }
+
+    #xx {
+      /* margin: 20px auto; */
+      text-align: center;
+      border: 1px solid red;
+      width: 272px;
+
+    }
+
+    h4 {
+      text-align: left;
+    }
+
+    a {
+      color: #551a8b
+    }
+  </style>
+
+  <script>
+    console.log(drag, 111111111)
+    window.onload = function () {
+
+      initialBody()
+      var table = document.getElementById('table')
+      var xx = document.getElementById('xx')
+      drag(table)
+      drag(xx)
+      // 删除员工
+      var allA = document.getElementsByTagName('a')
+      for (var i = 0; i < allA.length; i++) {
+        allA[i].onclick = delA
+        console.log('for 循环在执行' + i)
+      }
+
+      // 添加员工
+      var submit = document.getElementById('submit')
+      var name = document.getElementById('name')
+      var inputs = document.getElementsByTagName('input')
+
+
+      //var tb = document.getElementById('table')
+      var tbody = document.getElementsByTagName('tbody')[0] //有一个隐含的标签tbody
+      submit.onclick = function () {
+        if (confirm('确认添加' + inputs[0].value + '员工吗?')) {
+          var tr = createTr(inputs)
+          // tb.appendChild(tr)   原来页面的tr默认都放在<tbody>标签中了,这个tbody我们没写,是浏览器加上的.所以tr应该添加到tbody标签下
+          tbody.appendChild(tr)
+          layInLocalStorage()
+        }
+      }
+
+      //阻止冒泡
+      var xxx = document.getElementById('xxx')
+      xxx.onmousedown = function (event) {
+        event = event || window.event
+        if (event.target.className === 'input') {
+          console.log('取消冒泡')
+          event.cancelBubble=true
+        }
+      }
+    }
+
+    function delA() {
+      alert('响应函数在执行')
+      var tr = this.parentNode.parentNode
+      var name = tr.getElementsByTagName('td')[0].innerHTML
+      if (confirm('确认删除' + name + '吗?')) {
+        tr.parentNode.removeChild(tr)
+        layInLocalStorage()
+      }
+      return false //用于阻止超链接点击跳转
+    }
+
+    function createTr(inputs) {
+      var tr = document.createElement('tr')
+      var tds = []
+      var tdLastChild = document.createElement('td')
+      tdLastChild.innerHTML = '<a href="javascript:;">Delete</a>'
+      tdLastChild.lastChild.onclick = delA
+      for (let i = 0; i < inputs.length; i++) {
+        var td = document.createElement('td')
+        tds.push(td)
+        tds[i].innerHTML = inputs[i].value
+        tr.appendChild(tds[i])
+        tr.appendChild(tdLastChild)
+      }
+      return tr
+    }
+
+    function layInLocalStorage() {
+      var body = document.body
+      localStorage.setItem('body', JSON.stringify(body))
+    }
+
+    function initialBody() {
+      var storage = window.localStorage
+      var body = storage['body']
+      console.log('******************')
+      // if(body){
+      //   body.innerHTML=JSON.parse(body)
+      // }
+      getFromLocalStorage('body')
+    }
+
+    function getFromLocalStorage(name) {
+      return JSON.parse(localStorage.getItem(name) || 'null')
+    }
+    /***************/
+    function drag(obj) {
+      obj.onmousedown = function (event) {
+        //设置捕获鼠标按下,解决IE8中默认拖拽不能用return false解决的问题.
+        //后边要设置一个obj.releaseCapture(),否则陷入循环,所有点击都被obj捕获.
+        obj.setCapture && obj.setCapture()
+        //解决事件对象兼容问题
+        event = event || window.event
+        console.log('鼠标按下 了')
+        //解决滚动条问题,只要用到了事件对象的clientX clientY就需要考虑滚动条问题,因为clientX clientY是鼠标相对于当前视口的坐标.
+        //pageX和pageY如果不考虑兼容IE8,则是一个很好的选择,因为他们是鼠标相对于文档的坐标
+        var st1 = document.documentElement.scrollTop
+        var sl1 = document.documentElement.scrollLeft
+        /*当出现滚动条时,要加上滚动距离,才是obj左上角与光标间的距离*/
+        var ofx = event.clientX - obj.offsetLeft + sl1
+        var ofy = event.clientY - obj.offsetTop + st1
+        document.onmousemove = function (event) {
+          event = event || window.event
+          var x = event.clientX - ofx
+          var y = event.clientY - ofy
+          //解决滚动条问题,只要用到了事件对象的clientX clientY就需要考虑滚动条问题,因为clientX clientY是鼠标相对于当前视口的坐标.
+          //pageX和pageY如果不考虑兼容IE8,则是一个很好的选择,因为他们是鼠标相对于文档的坐标
+          var st2 = document.documentElement.scrollTop
+          var sl2 = document.documentElement.scrollLeft
+          obj.style.left = x + sl2 + 'px'
+          obj.style.top = y + st2 + 'px'
+        }
+        document.onmouseup = function () {
+          console.log('鼠标抬起来了')
+          //鼠标抬起,取消捕获鼠标按下事件
+          obj.releaseCapture && obj.releaseCapture()
+          //box1.onmousedown=null 不能写这句,写了只能拖拽一次
+          document.onmousemove = null
+          document.onmouseup = null
+        }
+        //取消浏览器默认拖拽事件(不取消会导致 页面全选后再拖动box1时异常)
+        //但这个方法对IE8无效
+        return false
+      }
+    }
+
+    /**********************/
+  </script>
+
+</head>
+
+<body>
+  <table id='table' style='position: fixed;'>
+    <tr>
+      <th>Name</th>
+      <th>Email</th>
+      <th>Salary</th>
+      <th></th>
+    </tr>
+    <tr>
+      <td>Tom</td>
+      <td>tom@tom.com</td>
+      <td>5000</td>
+      <td><a href="">Delete</a></td>
+    </tr>
+    <tr>
+      <td>Jerry</td>
+      <td>jerry@jerry.com</td>
+      <td>8000</td>
+      <td><a href="">Delete</a></td>
+    </tr>
+    <tr>
+      <td>Bob</td>
+      <td>bob@bob.com</td>
+      <td>10000</td>
+      <td><a href="">Delete</a></td>
+    </tr>
+  </table>
+  <div id="xx" style='position:fixed;top:120px;'>
+    <div id="xxx">
+      <h4>添加新员工</h4>
+      <label id="name">name:</label>
+      <input type="text" class='input'>
+      <br>
+      <label for="">email:</label>
+      <input type="text" class='input'>
+      <br>
+      <label for="">salary:</label>
+      <input type="text" class='input'>
+      <br>
+      <button type="submit" id='submit' value="submit">submit
+
+    </div>
+  </div>
+  
+</body>
+
+</html>

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>JS Bin</title>
+</head>
+
+<body>
+  <button id="btn1">点我</button>
+</body>
+<script>
+  var btn=document.getElementById('btn1')
+  console.log(btn)
+ // btn.addEventListener('click',function(){alert(3)},false)
+ // btn.addEventListener('click',function(){alert(4)},true)
+
+ // btn.addEventListener('click',function(){alert(2)},true)
+ // btn.attachEvent('onclick',function(){alert('attach')})
+  
+ bind(btn,'click',function(){
+   console.log('#########################')
+   console.log(this)//这里的this是btn
+   console.log('#########################')
+   alert(2)
+ }) 
+ bind(btn,'click',function(){alert('hello world')}) 
+  
+  //在IE8中还是后绑定先执行,与Chrome和火狐相反
+  
+  function bind(obj,eventStr,callback){
+    if(obj.addEventListener){
+      //Chrome和火狐调用
+      obj.addEventListener(eventStr,callback,false)
+    }else{
+      //IE8调用
+      obj.attachEvent('on'+eventStr,function(){
+        console.log('xxxxxxxxxxxxxxxxxxxxxxxx')
+        console.log(this,1111)//这里的this是window
+        console.log('xxxxxxxxxxxxxxxxxxxxxxxx')
+        callback.call(obj)    //将obj对象设置为回调函数的this
+      })
+    }
+  }
+  
+</script>
+
+</html>

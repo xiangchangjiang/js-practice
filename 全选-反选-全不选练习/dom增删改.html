@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>JS Bin</title>
+  <style>
+    ul>li{
+      list-style:none;
+      text-decoration:none;
+      border:1px solid ;
+      padding:10px;
+      display:inline-block;
+      margin:10px;
+    }
+  </style>
+  <script>
+    window.onload=function(){
+      myClick('btn1',function(){
+        var li=document.createElement('li')
+        var gzText=document.createTextNode('广州')
+        li.appendChild(gzText)
+        var city=document.getElementById('city')
+        city.appendChild(li)
+      })
+      myClick('btn2',function(){
+        var li=document.createElement('li')
+        var gzText=document.createTextNode('广州')
+        li.appendChild(gzText)  
+        var bj=document.getElementById('bj')
+        var city=document.getElementById('city')
+        
+        city.insertBefore(li,bj)
+      })
+      myClick('btn3',function(){
+        var li=document.createElement('li')
+        li.innerHTML='广州'
+        var bj=document.getElementById('bj')
+        var city=document.getElementById('city') 
+        city.replaceChild(li,bj)  
+      })
+      myClick('btn4',function(){
+        var bj=document.getElementById('bj')
+        // var city=document.getElementById('city')
+        bj.parentNode.removeChild(bj)
+      })
+      
+       myClick('btn5',function(){
+        var city=document.getElementById('city')
+        var li=document.createElement('li')
+        li.innerHTML+='广州'
+        city.appendChild(li)
+        // city.innerHTML += '<li>观众</li>'
+      })
+    }  
+
+
+    function myClick(btn,fun){
+       var btn=document.getElementById(btn)
+       btn.onclick=fun
+    }
+    
+    
+  </script>
+</head>
+
+<body>
+  <ul id='city'>
+    <li id='bj'>北街</li>
+    <li>忽视</li>
+    <li>上升</li>
+    <li>那就</li>
+  </ul>
+  <div>
+    <button id='btn1'>按钮1</button>
+    <button id='btn2'>按钮2</button>
+    <button id='btn3'>按钮3</button>
+    <button id='btn4'>按钮4</button>
+    <button id='btn5'>按钮5</button>
+  </div>
+</body>
+
+</html>

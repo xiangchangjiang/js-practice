@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>键盘方向键控制元素移动兼容IE8</title>
+  <style>
+    #box1 {
+      width: 100px;
+      height: 100px;
+      background: yellowgreen;
+      position: absolute;
+    }
+
+    html {
+      border: 1px solid red;
+    }
+
+    body {
+      height: 1000px;
+      border: 3px solid
+    }
+  </style>
+
+  <script>
+    window.onload = function () {
+      var box1 = document.getElementById('box1')
+      var speed = 10
+      document.onkeydown = function (event) {
+        event = event || window.event
+        event.preventDefault && event.preventDefault()
+        //阻止Chrome和火狐默认事件
+        console.log(event)
+
+        speed = (event.ctrlKey) ? 2 : 10
+        //按下Ctrl键就缓动,否则就快速移动,speed意义不是太大,这里还是写成定值10了
+        console.log(speed)
+        console.log('event.keyCode=' + event.keyCode)
+        switch (event.keyCode) {
+          case 37:
+            if (box1.offsetLeft > 0) {
+              box1.style.left = box1.offsetLeft - speed + 'px'
+            }
+            break;
+
+          case 38:
+            if (box1.offsetTop > 0) {
+              box1.style.top = box1.offsetTop - speed + 'px'
+            }
+            break;
+
+          case 39:
+            if (parseInt(box1.style.left) < 300) {
+              console.log(event.keyCode)
+              box1.style.left = box1.offsetLeft + speed + 'px'
+              console.log(box1.style.left, 39)
+            }
+            console.log('ifxx')
+            break;
+
+          case 40:
+            if (box1.offsetTop < 600) {
+              box1.style.top = box1.offsetTop + speed + 'px'
+            }
+            break;
+        }
+        return false//阻止IE8默认事件
+      }
+    }
+  </script>
+</head>
+
+<body>
+  <h4>按住Ctrl缓动,松开Ctrl快速移动,监听document的onkeydown事件</h4>
+  <hr>
+  <h4>事件对象event的event.altKey   event.ctrlKey  event.shiftKey判断是否按住了这几个键</h4>
+  <hr>
+  <h4>对象.offsetLeft  对象.offsetTop 用来获取对象相对于其定位元素的偏移量 获取到的数据类型是number,没有单位,可以直接用于计算</h4>
+  <hr>
+  <h4>对象要定位,内联样式 对象.style.left  赋值时要加上"px"</h4>
+  <hr>
+  <h4>通过条件判断可以给其设定运动范围</h4>
+  <div id="box1" style='left:250px;top:300px;'></div>
+  <hr style='position:absolute;top:692px;width:100%'>
+
+</body>
+
+</html>

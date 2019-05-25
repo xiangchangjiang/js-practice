@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>练习</title>
+  <script>
+    window.onload=function(){
+      var items=document.getElementsByName('items')
+      var checkedAllBox=document.getElementById('checkedAllBox')
+      /*
+      *全选按钮,点击后四个多选框全部选中
+      */
+      var checkedAllButton=document.getElementById('checkedAllButton')
+      checkedAllButton.onclick=function(){
+        for(let i=0;i<items.length;i++){
+          items[i].checked=true
+        } 
+        checkedSelectOrNot()
+      }
+      
+     /*
+     *全不选按钮,点击后四个多选框全部取消选中
+     */
+      var checkedNoButton=document.getElementById('checkedNoButton')
+      checkedNoButton.onclick=function(){
+        for(let i=0;i<items.length;i++){
+          items[i].checked=false
+        } 
+        checkedSelectOrNot()
+      }
+      
+      /*
+      *反选按钮,点击后取反
+      */
+      var checkedRevButton=document.getElementById('checkedRevButton')
+      checkedRevButton.onclick=function(){
+        for(let i=0;i<items.length;i++){
+          items[i].checked=!items[i].checked
+        } 
+        checkedSelectOrNot()
+      }
+      
+      /*
+      *提交按钮,点击后打印所有选中的按钮
+      */
+      var sendButton=document.getElementById('sendButton')
+      sendButton.onclick=function(){
+       for(let i=0;i<items.length;i++){
+          if(items[i].checked===true){
+            alert(items[i].value)
+          }
+        }       
+      }
+      
+      /*
+      *为四个复选框添加监听事件
+      */
+      for(let i=0;i<items.length;i++){
+        items[i].onclick=function(){
+          checkedSelectOrNot()
+        }
+      }
+            /*
+      *为上方全选框添加click事件,选中时,下方全部选中,取消时都取消
+      */
+      checkedAllBox.onclick=function(){ 
+        items.forEach((i)=>{
+          i.checked=checkedAllBox.checked
+        })    
+      }
+
+
+
+      function checkedSelectOrNot(){
+        var flag=true
+        for(let i=0;i<items.length;i++){
+          if(items[i].checked===false){
+            flag=false
+            break
+          }
+        }
+        checkedAllBox.checked=flag
+      }
+    }
+  </script>
+</head>
+
+<body>
+  <form action="/index.html" method='post'></form>
+  你爱好的运动是?
+  <input type="checkbox" id='checkedAllBox'>全选/全不选
+  <br>
+  <input type="checkbox" name='items' value='足球'>足球
+  <input type="checkbox" name='items' value='篮球'>篮球
+  <input type="checkbox" name='items' value='羽毛球'>羽毛球
+  <input type="checkbox" name='items' value='乒乓球'>乒乓球
+  <br>
+  <button id='checkedAllButton'>全 选</button>
+  <button id='checkedNoButton'>全不选</button>
+  <button id='checkedRevButton'>反 选</button>
+  <button id='sendButton'>提 交</button>
+</body>
