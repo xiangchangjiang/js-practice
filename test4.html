@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>点击按钮div向右走</title>
+  <style>
+    *{margin:0;padding:0;}
+    html{border:1px solid black;}
+    body{border:1px solid red;height:1000px;}
+    #box{width:100px;height:100px;background:darkcyan;position:absolute;left:0;}
+  
+  </style>
+  <script>
+    window.onload=function(){
+      function getStyle(obj,name){
+        if(window.getComputedStyle){
+          return getComputedStyle(obj,null)[name]
+        }else{
+          return obj.currentStyle[name]
+        }
+      }  
+      var box=document.getElementById('box')
+      var btn=document.getElementById('btn')
+      var timer
+      console.log(1)
+      btn.onclick=function(){
+        // alert('div向右走')
+        clearInterval(timer)
+        timer=setInterval(function(){
+          console.log('计时器在运行')
+          var oldValue=parseInt(getStyle(box,'left'))
+          console.log(oldValue)
+          var newValue=oldValue+17
+          if(newValue>400){
+            newValue=400
+          }
+          box.style.left=newValue+'px'
+          if(newValue>=400){
+            clearInterval(timer)
+          }
+        },100)
+      }
+    }
+  
+  </script>
+</head>
+<body>
+<button id="btn">点击div向右走</button>
+ <br><br>
+<div id="box"></div>
+  <div style="position:absolute;width:0;top:0;height:800px;left:400px;border-right:1px solid black;"></div>
+</body>
+</html>
