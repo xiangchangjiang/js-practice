@@ -37,14 +37,14 @@
       }
       
       function move(obj,target,speed){
-        var  oldValue=parseInt(getStyle(obj,'left'))
-        if(target<oldValue){
+        var  current=parseInt(getStyle(obj,'left'))
+        if(target<current){
           speed=-speed 
         }
         clearInterval(timer)
         timer=setInterval(function(){
           console.log(getStyle(obj,'left'))
-          oldValue=parseInt(getStyle(obj,'left'))
+          var oldValue=parseInt(getStyle(obj,'left'))
 
           var newValue=oldValue+speed
           console.log(newValue)
