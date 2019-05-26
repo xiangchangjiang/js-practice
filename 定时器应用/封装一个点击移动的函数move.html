@@ -6,7 +6,7 @@
   <title>封装一个move函数,兼容IE8</title>
   <style>
     *{margin:0;padding:0;}
-  #xx{
+  #xx,#box2{
     width:100px;
     height:100px;
     background:greenyellow;
@@ -14,6 +14,11 @@
     left:0;
   
   }
+  #box2{
+    background:crimson;
+    top:200px;
+  }
+
   </style>
 
 
@@ -22,27 +27,30 @@
       var btn1=document.getElementById('btn1')
       var btn2=document.getElementById('btn2')
       var btn3=document.getElementById('btn3')
+      var box2=document.getElementById('box2')
       var xx=document.getElementById('xx')
-      var timer
       btn1.onclick=function(){
         move(xx,400,12)
       }
 
       
       btn2.onclick=function(){
-        move(xx,20,8)
+        move(xx,0,8)
       } 
-      btn3.onclick=function(){
-        clearInterval(timer)
+
+      btn4.onclick=function(){
+        move(box2,400,5)
       }
-      
+
       function move(obj,target,speed){
         var  current=parseInt(getStyle(obj,'left'))
         if(target<current){
           speed=-speed 
         }
-        clearInterval(timer)
-        timer=setInterval(function(){
+        clearInterval(obj.timer)
+        /*之前用全局变量保存timer,当函数同时被多个元素使用时,后一个会终止前一个的计时器,导致一次只能使一个元素运动*
+        /*在每一个调用move函数的对象中设置一个timer属性,使每一个对象独立保存自己的计时器,可以使多个元素调用函数互不影响*/
+        obj.timer=setInterval(function(){
           console.log(getStyle(obj,'left'))
           var oldValue=parseInt(getStyle(obj,'left'))
 
@@ -54,7 +62,7 @@
           }
           obj.style.left=newValue+'px'
           if(obj.offsetLeft===target){
-            clearInterval(timer)
+            clearInterval(obj.timer)
           }
         
         },100)
@@ -70,10 +78,13 @@
 <body>
   <button id='btn1'>点击按钮div向右走</button>
   <button id='btn2'>点击按钮div向左走</button>
-  <button id='btn3'>停止</button>
+  <button id='btn4'>点击按钮box2向右走</button>
+  
   <br>
   <br>
   <div id="xx"></div>
+  <br><br>
+  <div id='box2'>box2</div>
   <div style='width:0px;height:800px;position:absolute;left:400px;border-right:1px solid black;'></div>
 </body>
 
