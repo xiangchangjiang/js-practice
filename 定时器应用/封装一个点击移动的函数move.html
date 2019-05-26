@@ -12,7 +12,7 @@
     background:greenyellow;
     position:absolute;
     left:0;
-  
+    top:300;
   }
   #box2{
     background:crimson;
@@ -21,7 +21,7 @@
 
   </style>
 
-
+  <script src="./tools.js"></script>
   <script>
     window.onload=function(){
       var btn1=document.getElementById('btn1')
@@ -30,51 +30,28 @@
       var box2=document.getElementById('box2')
       var xx=document.getElementById('xx')
       btn1.onclick=function(){
-        move(xx,'width',400,12,function(){move(xx,'height',250,25)})
+        move(xx,'width',400,12,function(){
+          move(xx,'height',250,25,function(){
+            move(xx,'width',100,36,function(){
+              move(xx,'height',100,34)
+            })
+          })})
       }
 
       
       btn2.onclick=function(){
-        move(xx,'left',0,8,function(){move(xx,'height',300,35)})
+        move(xx,'width',30,8,function(){
+          move(xx,'height',30,35)})
       } 
 
       btn4.onclick=function(){
-        move(box2,'height',400,5,function(){alert('程序执行完毕!')})
+        move(box2,'width',400,25,function(){
+          move(box2,'width',100,34,function(){
+            setTimeout(function(){alert('程序执行完毕!')},50)
+          })})
       }
 
-      /*功能扩展:增加一个attr参数,用来传递需要改变的属性,如传入"height"  "top"等 */
-      /*增加一个回调函数callback*/
-      function move(obj,attr,target,speed,callback){
-        var  current=parseInt(getStyle(obj,attr))
-        if(target<current){
-          speed=-speed 
-        }
-        clearInterval(obj.timer)
-        /*之前用全局变量保存timer,当函数同时被多个元素使用时,后一个会终止前一个的计时器,导致一次只能使一个元素运动*
-        /*在每一个调用move函数的对象中设置一个timer属性,使每一个对象独立保存自己的计时器,可以使多个元素调用函数互不影响*/
-        obj.timer=setInterval(function(){
-          console.log(getStyle(obj,attr))
-          var oldValue=parseInt(getStyle(obj,attr))
 
-          var newValue=oldValue+speed
-          console.log(newValue)
-          
-          if (speed>0 && newValue>=target ||speed<0 && newValue<=target){
-            newValue=target
-          }
-          obj.style[attr]=newValue+'px'
-          if(newValue===target){
-            clearInterval(obj.timer)
-            callback && callback()
-            // setTimeout(function(){callback && callback()},50) 
-          }
-        
-        },50)
-      }
-
-      function getStyle(obj,name){
-        return window.getComputedStyle?getComputedStyle(obj,null)[name]:obj.currentStyle[name]
-      }
     }
   </script>
 </head>
@@ -86,7 +63,7 @@
   
   <br>
   <br>
-  <div id="xx"></div>
+  <div id="xx">div</div>
   <br><br>
   <div id='box2'>box2</div>
   <div style='width:0px;height:800px;position:absolute;left:400px;border-right:1px solid black;'></div>
